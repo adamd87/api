@@ -8,8 +8,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 @SpringBootApplication
 public class ApiApplication {
 
-
-	public void main(String[] args) {
+	public static void main(String[] args) {
 		SpringApplication.run(ApiApplication.class, args);
 	}
 
