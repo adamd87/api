@@ -32,7 +32,7 @@ public class OfferViewServiceImpl implements OfferViewService {
     public List<OfferDto> getAll() {
         List<Offer> offerList = service.findAll();
         List<OfferDto> offerDtoList = mapper.mapListToDto(offerList);
-        return offerDtoList.stream().sorted(Comparator.comparing(OfferDto::getClientFullName)).collect(Collectors.toUnmodifiableList());
+        return offerDtoList.stream().sorted(Comparator.comparing(OfferDto::getClientFullName)).collect(Collectors.toList());
     }
 
     @Override

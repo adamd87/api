@@ -37,7 +37,7 @@ public class MaterialViewServiceImpl implements MaterialViewService {
         }
 
 
-        return result.stream().sorted(Comparator.comparing(MaterialDto::getName)).collect(Collectors.toUnmodifiableList());
+        return result.stream().sorted(Comparator.comparing(MaterialDto::getName)).collect(Collectors.toList());
     }
 
     @Override
