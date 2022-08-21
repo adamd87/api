@@ -23,7 +23,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer findById(Long clientId) {
 
-        if (customerRepository.findById(clientId).isEmpty()) {
+        if (!customerRepository.findById(clientId).isPresent()) {
             throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
         }
         return customerRepository.findById(clientId).get();
