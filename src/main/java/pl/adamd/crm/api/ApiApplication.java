@@ -13,7 +13,7 @@ public class ApiApplication extends SpringBootServletInitializer {
 		return super.configure(builder);
 	}
 
-	public static void main(String[] args) {
+	public void main(String[] args) {
 		SpringApplication.run(ApiApplication.class, args);
 	}
 
