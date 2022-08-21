@@ -7,10 +7,9 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication
-@SpringBootConfiguration
 public class ApiApplication {
 
-	public static void main(String[] args) {
+	public static void main(String[] args)  throws InterruptedException{
 		SpringApplication.run(ApiApplication.class, args);
 	}
 
