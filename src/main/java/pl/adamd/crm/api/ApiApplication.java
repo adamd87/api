@@ -9,7 +9,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 public class ApiApplication {
 
 
-	public static void main(String[] args) {
+	public void main(String[] args) {
 		SpringApplication.run(ApiApplication.class, args);
 	}
 
