@@ -6,7 +6,6 @@ import lombok.Data;
 public class MaterialDto {
 
     private Long id;
-
     private String name;
     private String producer;
     private String power;

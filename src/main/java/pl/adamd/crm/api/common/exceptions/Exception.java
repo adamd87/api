@@ -11,12 +11,13 @@ public class Exception {
     @ResponseBody
     @ExceptionHandler(CustomerNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String customerNotFoundHandler(CustomerNotFoundException ex){
+    String customerNotFoundHandler(CustomerNotFoundException ex) {
         return ex.getMessage();
     }
 
-    public static class CustomerNotFoundException extends RuntimeException {
-        public CustomerNotFoundException(Long id){
+    public static class CustomerNotFoundException
+            extends RuntimeException {
+        public CustomerNotFoundException(Long id) {
             super("Could not find customer " + id);
         }
     }

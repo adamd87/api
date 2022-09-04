@@ -18,7 +18,8 @@ import java.io.IOException;
 import static org.slf4j.LoggerFactory.getLogger;
 
 
-public class AuthTokenFilter extends OncePerRequestFilter {
+public class AuthTokenFilter
+        extends OncePerRequestFilter {
 
     @Autowired
     private JwtUtils jwtUtils;
@@ -30,9 +31,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
+    protected void doFilterInternal(
+            HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
         try {
@@ -43,13 +43,14 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
                 UserDetails employeeDetails = employeeDetailsService.loadUserByUsername(employeeName);
 
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        employeeDetails, null, employeeDetails.getAuthorities()
-                );
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(employeeDetails, null,
+                                                                employeeDetails.getAuthorities());
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                SecurityContextHolder.getContext()
+                                     .setAuthentication(authentication);
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             logger.error("Cannot set employee authentication: {}", e);
         }
 
@@ -59,7 +60,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     private String parseJwt(HttpServletRequest request) {
         String headerAuth = request.getHeader("Authorization");
 
-        if(StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
+        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
             return headerAuth.substring(7);
         }
         return null;

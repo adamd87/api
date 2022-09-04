@@ -8,7 +8,8 @@ import pl.adamd.crm.api.config.employee.entity.Employee;
 import java.util.Optional;
 
 @Repository
-public interface EmployeeRepository extends JpaRepository<Employee, Long> {
+public interface EmployeeRepository
+        extends JpaRepository<Employee, Long> {
     Optional<Employee> findByEmployeeName(String employeeName);
 
     Boolean existsByEmployeeName(String employeeName);

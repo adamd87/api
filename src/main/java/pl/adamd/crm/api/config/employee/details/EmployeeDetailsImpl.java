@@ -13,7 +13,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
-public class EmployeeDetailsImpl implements UserDetails {
+public class EmployeeDetailsImpl
+        implements UserDetails {
 
     private static final long serialVersionUID = 1L;
 
@@ -29,12 +30,14 @@ public class EmployeeDetailsImpl implements UserDetails {
     private Collection<? extends GrantedAuthority> authorities;
 
     public static EmployeeDetailsImpl build(Employee user) {
-        List<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority
-                        (role.getName().name()))
-                .collect(Collectors.toList());
+        List<GrantedAuthority> authorities = user.getRoles()
+                                                 .stream()
+                                                 .map(role -> new SimpleGrantedAuthority(role.getName()
+                                                                                             .name()))
+                                                 .collect(Collectors.toList());
 
-        return new EmployeeDetailsImpl(user.getId(), user.getEmployeeName(), user.getEmail(), user.getPassword(), authorities);
+        return new EmployeeDetailsImpl(user.getId(), user.getEmployeeName(), user.getEmail(), user.getPassword(),
+                                       authorities);
     }
 
 
@@ -83,10 +86,12 @@ public class EmployeeDetailsImpl implements UserDetails {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (o == null || getClass() != o.getClass())
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
+        }
         EmployeeDetailsImpl user = (EmployeeDetailsImpl) o;
         return Objects.equals(id, user.id);
     }

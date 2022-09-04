@@ -20,7 +20,7 @@ public class CustomerController {
 
     @GetMapping("/all")
     public ResponseEntity<List<CustomerDto>> getAllClients() {
-       return viewService.getAll();
+        return viewService.getAll();
     }
 
     @GetMapping("/by-id/{id}")
@@ -30,7 +30,7 @@ public class CustomerController {
 
     @GetMapping("/list/users-with-agreement")
     @PreAuthorize("hasRole('FITTER')")
-    ResponseEntity<List<CustomerDto>> getAgreementClientList(){
+    ResponseEntity<List<CustomerDto>> getAgreementClientList() {
         return viewService.getListOfClientsWithAgreement();
     }
 
@@ -45,7 +45,6 @@ public class CustomerController {
     ResponseEntity<CustomerDto> updateClient(@PathVariable Long id, @RequestBody CustomerDto updateClientDetails) {
         return viewService.updateClient(id, updateClientDetails);
     }
-
 
 
 }

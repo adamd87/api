@@ -14,7 +14,8 @@ import static pl.adamd.crm.api.common.Utils.setIfNotNull;
 
 
 @Service
-public class CustomerViewServiceImpl implements CustomerViewService {
+public class CustomerViewServiceImpl
+        implements CustomerViewService {
 
     @Autowired
     CustomerService service;
@@ -38,20 +39,20 @@ public class CustomerViewServiceImpl implements CustomerViewService {
     public ResponseEntity<CustomerDto> addNewClient(CustomerDto request) {
 
         Customer customer = Customer.builder()
-                .fullName(request.getFullName())
-                .phone(request.getPhone())
-                .email(request.getEmail())
-                .info(request.getInfo())
-                .agreement(request.isAgreement())
-                .business(request.isBusiness())
-                .nip(request.getNip())
-                .street(request.getStreet())
-                .buildingNumber(request.getBuildingNumber())
-                .apartmentNumber(request.getApartmentNumber())
-                .postCode(request.getPostCode())
-                .city(request.getCity())
-                .country(request.getCountry())
-                .build();
+                                    .fullName(request.getFullName())
+                                    .phone(request.getPhone())
+                                    .email(request.getEmail())
+                                    .info(request.getInfo())
+                                    .agreement(request.isAgreement())
+                                    .business(request.isBusiness())
+                                    .nip(request.getNip())
+                                    .street(request.getStreet())
+                                    .buildingNumber(request.getBuildingNumber())
+                                    .apartmentNumber(request.getApartmentNumber())
+                                    .postCode(request.getPostCode())
+                                    .city(request.getCity())
+                                    .country(request.getCountry())
+                                    .build();
 
         service.save(customer);
 
@@ -88,7 +89,7 @@ public class CustomerViewServiceImpl implements CustomerViewService {
         List<Customer> result = new ArrayList<>();
 
         for (Customer customer : getAllClients) {
-            if (customer.isAgreement()){
+            if (customer.isAgreement()) {
                 result.add(customer);
             }
         }

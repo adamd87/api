@@ -32,15 +32,23 @@ public class WebSecurityConfig {
     EmployeeDetailsServiceImpl employeeDetailsService;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable().exceptionHandling()
-                .authenticationEntryPoint(unauthorizedHandler).and()
-                .sessionManagement().sessionCreationPolicy
-                        (SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests()
-                .antMatchers("/api/auth/**").permitAll()
-                .anyRequest()
-                .authenticated();
+    public SecurityFilterChain filterChain(HttpSecurity http)
+            throws Exception {
+        http.cors()
+            .and()
+            .csrf()
+            .disable()
+            .exceptionHandling()
+            .authenticationEntryPoint(unauthorizedHandler)
+            .and()
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+            .authorizeRequests()
+            .antMatchers("/api/auth/**")
+            .permitAll()
+            .anyRequest()
+            .authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
@@ -58,7 +66,8 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 }

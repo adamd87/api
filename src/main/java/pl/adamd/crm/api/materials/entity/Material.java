@@ -6,6 +6,7 @@ import pl.adamd.crm.api.offer.entity.Offer;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class Material {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 // TODO DODAWANIE PRZY ZREALIZOWANIU UMOWY NUMERU SERYJNEKO JAKO KOMENTARZ
+    @NotNull
     private String name;
     private String producer;
     private String power;

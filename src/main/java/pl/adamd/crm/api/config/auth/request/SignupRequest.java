@@ -1,5 +1,6 @@
 package pl.adamd.crm.api.config.auth.request;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class SignupRequest {
@@ -8,7 +9,7 @@ public class SignupRequest {
 
     private String email;
 
-    private Set<String> roles;
+    private Set<String> roles = new HashSet<>();
 
     private String password;
 

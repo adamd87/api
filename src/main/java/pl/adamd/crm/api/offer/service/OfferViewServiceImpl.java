@@ -21,7 +21,8 @@ import static pl.adamd.crm.api.common.Utils.setIfNotNull;
 
 @Service
 @AllArgsConstructor
-public class OfferViewServiceImpl implements OfferViewService {
+public class OfferViewServiceImpl
+        implements OfferViewService {
     private final OfferService service;
     private final OfferMapper mapper;
     private final MaterialService materialService;
@@ -32,7 +33,9 @@ public class OfferViewServiceImpl implements OfferViewService {
     public List<OfferDto> getAll() {
         List<Offer> offerList = service.findAll();
         List<OfferDto> offerDtoList = mapper.mapListToDto(offerList);
-        return offerDtoList.stream().sorted(Comparator.comparing(OfferDto::getClientFullName)).collect(Collectors.toList());
+        return offerDtoList.stream()
+                           .sorted(Comparator.comparing(OfferDto::getClientFullName))
+                           .collect(Collectors.toList());
     }
 
     @Override
@@ -55,15 +58,19 @@ public class OfferViewServiceImpl implements OfferViewService {
 
     @Override
     public List<MaterialDto> findAllMaterials() {
-       return materialMapper.mapMaterialsListToDto(materialService.findAll());
+        return materialMapper.mapMaterialsListToDto(materialService.findAll());
     }
 
     private void materialCost(Offer offer) {
         offer.setCostOfMaterials(costOfMaterials(offer));
-        offer.setMyWarmthACost(offer.getCostOfMaterials().subtract(BigDecimal.valueOf(7000)));
-        offer.setMyWarmthBCost(offer.getCostOfMaterials().subtract(BigDecimal.valueOf(21000)));
+        offer.setMyWarmthACost(offer.getCostOfMaterials()
+                                    .subtract(BigDecimal.valueOf(7000)));
+        offer.setMyWarmthBCost(offer.getCostOfMaterials()
+                                    .subtract(BigDecimal.valueOf(21000)));
         offer.setCleanAirA(getCleanAirACost(offer));
-        offer.setCleanAirB(offer.getCleanAirA().subtract(offer.getCleanAirA().multiply(BigDecimal.valueOf(0.12))));
+        offer.setCleanAirB(offer.getCleanAirA()
+                                .subtract(offer.getCleanAirA()
+                                               .multiply(BigDecimal.valueOf(0.12))));
 
         service.save(offer);
     }
@@ -89,7 +96,7 @@ public class OfferViewServiceImpl implements OfferViewService {
         return mapper.mapEntityToDto(offer);
     }
 
-//TODO................
+    //TODO................
     @Override
     public List<Offer> findByCustomerId(Long id) {
         return service.getByCustomerId(id);
@@ -98,13 +105,24 @@ public class OfferViewServiceImpl implements OfferViewService {
 
     private BigDecimal getCleanAirACost(Offer offer) {
         BigDecimal cleanAirACost;
-        if (offer.getCostOfMaterials().floatValue() <= 30000) {
-            cleanAirACost = offer.getCostOfMaterials().subtract(offer.getCostOfMaterials().multiply(BigDecimal.valueOf(0.45)));
-        } else if (offer.getCostOfMaterials().floatValue() > 30000 && offer.getCostOfMaterials().floatValue() < 45000) {
-            BigDecimal restCount = offer.getCostOfMaterials().subtract(BigDecimal.valueOf(30000));
-            cleanAirACost = offer.getCostOfMaterials().subtract(restCount.multiply(BigDecimal.valueOf(0.3))).subtract(BigDecimal.valueOf(13500));
-        } else {
-            cleanAirACost = offer.getCostOfMaterials().subtract(BigDecimal.valueOf(18000));
+        if (offer.getCostOfMaterials()
+                 .floatValue() <= 30000) {
+            cleanAirACost = offer.getCostOfMaterials()
+                                 .subtract(offer.getCostOfMaterials()
+                                                .multiply(BigDecimal.valueOf(0.45)));
+        }
+        else if (offer.getCostOfMaterials()
+                      .floatValue() > 30000 && offer.getCostOfMaterials()
+                                                    .floatValue() < 45000) {
+            BigDecimal restCount = offer.getCostOfMaterials()
+                                        .subtract(BigDecimal.valueOf(30000));
+            cleanAirACost = offer.getCostOfMaterials()
+                                 .subtract(restCount.multiply(BigDecimal.valueOf(0.3)))
+                                 .subtract(BigDecimal.valueOf(13500));
+        }
+        else {
+            cleanAirACost = offer.getCostOfMaterials()
+                                 .subtract(BigDecimal.valueOf(18000));
         }
         return cleanAirACost;
     }

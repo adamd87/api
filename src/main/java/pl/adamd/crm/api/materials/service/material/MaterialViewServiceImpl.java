@@ -1,6 +1,9 @@
 package pl.adamd.crm.api.materials.service.material;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.adamd.crm.api.materials.MaterialMapper;
 import pl.adamd.crm.api.materials.dto.MaterialDto;
@@ -16,7 +19,9 @@ import static pl.adamd.crm.api.common.Utils.setIfNotNull;
 
 @Service
 @AllArgsConstructor
-public class MaterialViewServiceImpl implements MaterialViewService {
+@Slf4j
+public class MaterialViewServiceImpl
+        implements MaterialViewService {
     private final MaterialService materialService;
     private final MaterialMapper materialMapper;
 
@@ -37,19 +42,44 @@ public class MaterialViewServiceImpl implements MaterialViewService {
         }
 
 
-        return result.stream().sorted(Comparator.comparing(MaterialDto::getName)).collect(Collectors.toList());
+        return result.stream()
+                     .sorted(Comparator.comparing(MaterialDto::getName))
+                     .collect(Collectors.toList());
     }
 
     @Override
-    public MaterialDto addNewMaterial(MaterialDto materialCreateRequest) {
-        Material material = new Material();
-        material.setName(materialCreateRequest.getName());
-        material.setProducer(materialCreateRequest.getProducer());
-        material.setCategory(materialCreateRequest.getCategory());
-        material.setPower(material.getPower());
-        material.setPrice(new BigDecimal(materialCreateRequest.getPrice()));
-        materialService.save(material);
-        return materialMapper.mapMaterialToDto(material);
+    public ResponseEntity<MaterialDto> addNewMaterial(MaterialDto materialCreateRequest) {
+
+        ResponseEntity<MaterialDto> responseMaterial;
+        try {
+            Material material = new Material();
+            if (materialCreateRequest.getId() != null) {
+                material = materialService.findById(materialCreateRequest.getId());
+            }
+            if (materialCreateRequest.getName()
+                                     .isEmpty()) {
+                throw new NullPointerException();
+            }
+            material.setName(materialCreateRequest.getName());
+            material.setProducer(materialCreateRequest.getProducer());
+            material.setCategory(materialCreateRequest.getCategory());
+            material.setPower(materialCreateRequest.getPower());
+            material.setPrice(new BigDecimal(materialCreateRequest.getPrice()));
+            materialService.save(material);
+            MaterialDto materialDto = materialMapper.mapMaterialToDto(material);
+            responseMaterial = new ResponseEntity<>(materialDto, HttpStatus.CREATED);
+        } catch (NumberFormatException exception) {
+            responseMaterial = ResponseEntity.status(HttpStatus.FORBIDDEN)
+                                             .build();
+            log.error(exception.getMessage() + " Number format error! Price: '" + materialCreateRequest.getPrice() +
+                              "' should be number! " + responseMaterial.getStatusCode());
+        } catch (NullPointerException exception) {
+            responseMaterial = ResponseEntity.status(HttpStatus.FORBIDDEN)
+                                             .build();
+            log.error(exception.getMessage() + " value! 'Name' is empty " + responseMaterial.getStatusCode());
+        }
+        return responseMaterial;
+
     }
 
     @Override
@@ -60,7 +90,7 @@ public class MaterialViewServiceImpl implements MaterialViewService {
         setIfNotNull(updateRequest.getProducer(), material::setProducer);
         setIfNotNull(updateRequest.getPower(), material::setPower);
         setIfNotNull(updateRequest.getCategory(), material::setCategory);
-        if (updateRequest.getPrice() != null){
+        if (updateRequest.getPrice() != null) {
             material.setPrice(new BigDecimal(updateRequest.getPrice()));
         }
         materialService.save(material);

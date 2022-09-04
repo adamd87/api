@@ -9,7 +9,8 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class MaterialServiceImpl implements MaterialService {
+public class MaterialServiceImpl
+        implements MaterialService {
     private final MaterialRepository materialRepository;
 
     @Override
@@ -17,7 +18,8 @@ public class MaterialServiceImpl implements MaterialService {
         if (!materialRepository.existsById(id)) {
             throw new RuntimeException("The specified material does not exist");
         }
-        return materialRepository.findById(id).get();
+        return materialRepository.findById(id)
+                                 .get();
     }
 
     @Override

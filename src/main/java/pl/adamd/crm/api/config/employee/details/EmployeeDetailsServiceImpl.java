@@ -10,18 +10,20 @@ import pl.adamd.crm.api.config.employee.entity.Employee;
 import pl.adamd.crm.api.config.employee.repository.EmployeeRepository;
 
 @Service
-public class EmployeeDetailsServiceImpl implements UserDetailsService {
+public class EmployeeDetailsServiceImpl
+        implements UserDetailsService {
 
     @Autowired
     EmployeeRepository employeeRepository;
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String employeeName) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String employeeName)
+            throws UsernameNotFoundException {
 
         Employee employee = employeeRepository.findByEmployeeName(employeeName)
-                .orElseThrow(() -> new UsernameNotFoundException
-                        ("Employee Not Found with username: " + employeeName));
+                                              .orElseThrow(() -> new UsernameNotFoundException(
+                                                      "Employee Not Found with username: " + employeeName));
 
         return EmployeeDetailsImpl.build(employee);
     }

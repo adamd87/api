@@ -48,90 +48,77 @@ public class AuthController {
     JwtUtils jwtUtils;
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateEmployee
-            (@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> authenticateEmployee(@RequestBody LoginRequest loginRequest) {
 
-        Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken
-                        (loginRequest.getEmployeeName(), loginRequest.getPassword()));
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.getEmployeeName(), loginRequest.getPassword()));
 
         SecurityContextHolder.getContext()
-                .setAuthentication(authentication);
+                             .setAuthentication(authentication);
 
         String jwt = jwtUtils.generateJwtToken(authentication);
 
-        EmployeeDetailsImpl employeeDetails =
-                (EmployeeDetailsImpl) authentication.getPrincipal();
+        EmployeeDetailsImpl employeeDetails = (EmployeeDetailsImpl) authentication.getPrincipal();
 
         List<String> roles = employeeDetails.getAuthorities()
-                .stream().map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
+                                            .stream()
+                                            .map(GrantedAuthority::getAuthority)
+                                            .collect(Collectors.toList());
 
-        return ResponseEntity.ok(new JwtResponse(jwt,
-                employeeDetails.getId(),
-                employeeDetails.getUsername(),
-                employeeDetails.getEmail(), roles));
+        return ResponseEntity.ok(
+                new JwtResponse(jwt, employeeDetails.getId(), employeeDetails.getUsername(), employeeDetails.getEmail(),
+                                roles));
     }
 
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser
-            (@RequestBody SignupRequest signUpRequest) {
+    public ResponseEntity<?> registerUser(@RequestBody SignupRequest signUpRequest) {
 
-        if (employeeRepository.existsByEmployeeName
-                (signUpRequest.getEmployeeName())) {
+        if (employeeRepository.existsByEmployeeName(signUpRequest.getEmployeeName())) {
 
             return ResponseEntity.badRequest()
-                    .body(new MessageResponse
-                            ("Error: EmployeeName is already taken!"));
+                                 .body(new MessageResponse("Error: EmployeeName is already taken!"));
         }
 
-        if (employeeRepository
-                .existsByEmail(signUpRequest.getEmail())) {
+        if (employeeRepository.existsByEmail(signUpRequest.getEmail())) {
 
             return ResponseEntity.badRequest()
-                    .body(new MessageResponse
-                            ("Error: Email is already in use!"));
+                                 .body(new MessageResponse("Error: Email is already in use!"));
         }
 
         // Create new employee account
-        Employee employee = new Employee(signUpRequest
-                .getEmployeeName(), signUpRequest.getEmail(),
-                passwordEncoder.encode(signUpRequest.getPassword()));
+        Employee employee = new Employee(signUpRequest.getEmployeeName(), signUpRequest.getEmail(),
+                                         passwordEncoder.encode(signUpRequest.getPassword()));
 
         Set<String> strRoles = signUpRequest.getRoles();
         Set<Role> roles = new HashSet<>();
 
         if (strRoles == null) {
-            Role employeeRole = roleRepository
-                    .findByName(ERole.ROLE_EMPLOYEE)
-                    .orElseThrow(() -> new RuntimeException
-                            ("Error: Role is not found."));
+            Role employeeRole = roleRepository.findByName(ERole.ROLE_EMPLOYEE)
+                                              .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(employeeRole);
-        } else {
+        }
+        else {
             strRoles.forEach(role -> {
                 switch (role) {
                     case "admin":
-                        Role adminRole = roleRepository
-                                .findByName(ERole.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException
-                                        ("Error: Role is not found."));
+                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                                                       .orElseThrow(
+                                                               () -> new RuntimeException("Error: Role is not found."));
                         roles.add(adminRole);
 
                         break;
                     case "fitter":
-                        Role fitterRole = roleRepository
-                                .findByName(ERole.ROLE_FITTER)
-                                .orElseThrow(() -> new RuntimeException
-                                        ("Error: Role is not found."));
+                        Role fitterRole = roleRepository.findByName(ERole.ROLE_FITTER)
+                                                        .orElseThrow(() -> new RuntimeException(
+                                                                "Error: Role is not found."));
                         roles.add(fitterRole);
 
                         break;
                     default:
-                        Role defaultRole = roleRepository
-                                .findByName(ERole.ROLE_EMPLOYEE)
-                                .orElseThrow(() -> new RuntimeException
-                                        ("Error: Role is not found."));
+                        Role defaultRole = roleRepository.findByName(ERole.ROLE_EMPLOYEE)
+                                                         .orElseThrow(() -> new RuntimeException(
+                                                                 "Error: Role is not found."));
                         roles.add(defaultRole);
                 }
             });
@@ -140,8 +127,7 @@ public class AuthController {
         employee.setRoles(roles);
         employeeRepository.save(employee);
 
-        return ResponseEntity.ok(new MessageResponse
-                ("Employee registered successfully!"));
+        return ResponseEntity.ok(new MessageResponse("Employee registered successfully!"));
     }
 
 }

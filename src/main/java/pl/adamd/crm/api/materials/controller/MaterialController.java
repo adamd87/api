@@ -34,14 +34,14 @@ public class MaterialController {
         return ResponseEntity.ok(materialViewService.getById(id));
     }
 
-    @PostMapping("/add")
+    @PutMapping("/add")
     public ResponseEntity<MaterialDto> createNewMaterial(@RequestBody MaterialDto material) {
-        return ResponseEntity.ok(materialViewService.addNewMaterial(material));
+        return materialViewService.addNewMaterial(material);
     }
 
     @PatchMapping("/update/{id}")
-    ResponseEntity<MaterialDto> updateById(@PathVariable Long id,
-                                           @RequestBody MaterialDto request) {
+    ResponseEntity<MaterialDto> updateById(
+            @PathVariable Long id, @RequestBody MaterialDto request) {
         return ResponseEntity.ok(materialViewService.updateMaterial(id, request));
     }
 }

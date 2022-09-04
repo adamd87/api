@@ -10,7 +10,8 @@ import pl.adamd.crm.api.customer.repository.CustomerRepository;
 import java.util.List;
 
 @Service
-public class CustomerServiceImpl implements CustomerService {
+public class CustomerServiceImpl
+        implements CustomerService {
 
     @Autowired
     CustomerRepository customerRepository;
@@ -23,10 +24,12 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer findById(Long clientId) {
 
-        if (!customerRepository.findById(clientId).isPresent()) {
+        if (!customerRepository.findById(clientId)
+                               .isPresent()) {
             throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
         }
-        return customerRepository.findById(clientId).get();
+        return customerRepository.findById(clientId)
+                                 .get();
     }
 
     @Override

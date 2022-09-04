@@ -9,7 +9,8 @@ import java.util.List;
 
 @AllArgsConstructor
 @Service
-public class OfferServiceImpl implements OfferService{
+public class OfferServiceImpl
+        implements OfferService {
     private final OfferRepository repository;
 
     @Override
@@ -24,7 +25,8 @@ public class OfferServiceImpl implements OfferService{
 
     @Override
     public Offer findById(Long id) {
-        return repository.findById(id).get();
+        return repository.findById(id)
+                         .get();
     }
 
     @Override
