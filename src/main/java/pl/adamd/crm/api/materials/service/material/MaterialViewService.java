@@ -2,17 +2,18 @@ package pl.adamd.crm.api.materials.service.material;
 
 import org.springframework.http.ResponseEntity;
 import pl.adamd.crm.api.materials.dto.MaterialDto;
+import pl.adamd.crm.api.materials.entity.Material;
 
 import java.util.List;
 
 public interface MaterialViewService {
-    List<MaterialDto> getAllMaterials();
+    List<Material> getAllMaterials();
 
-    ResponseEntity<MaterialDto> addNewMaterial(MaterialDto materialCreateRequest);
+    ResponseEntity<Material> addNewMaterial(MaterialDto materialCreateRequest);
 
-    MaterialDto updateMaterial(Long materialId, MaterialDto materialCreateRequest);
+    Material updateMaterial(Long materialId, MaterialDto materialCreateRequest);
 
-    MaterialDto getById(Long id);
+    Material getById(Long id);
 
 //    MaterialViewResponse increaseMaterialCount(Long materialId, MaterialIncreaseCountRequest request);
 }

@@ -3,51 +3,40 @@ package pl.adamd.crm.api.offer.service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.adamd.crm.api.materials.MaterialMapper;
-import pl.adamd.crm.api.materials.dto.MaterialDto;
 import pl.adamd.crm.api.materials.entity.Material;
 import pl.adamd.crm.api.materials.service.material.MaterialService;
 import pl.adamd.crm.api.offer.dto.OfferDto;
 import pl.adamd.crm.api.offer.entity.Offer;
-import pl.adamd.crm.api.offer.mapper.OfferMapper;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static pl.adamd.crm.api.common.Utils.setIfNotNull;
 
 @Service
 @AllArgsConstructor
-public class OfferViewServiceImpl
-        implements OfferViewService {
+public class OfferViewServiceImpl implements OfferViewService {
     private final OfferService service;
-    private final OfferMapper mapper;
     private final MaterialService materialService;
-    private final MaterialMapper materialMapper;
 
     @Override
     @Transactional
-    public List<OfferDto> getAll() {
-        List<Offer> offerList = service.findAll();
-        List<OfferDto> offerDtoList = mapper.mapListToDto(offerList);
-        return offerDtoList.stream()
-                           .sorted(Comparator.comparing(OfferDto::getClientFullName))
-                           .collect(Collectors.toList());
+    public List<Offer> getAll() {
+        return service.findAll();
+
     }
 
     @Override
     @Transactional
-    public OfferDto add(OfferDto offerDto) {
+    public Offer add(OfferDto offerDto) {
         Offer offer = new Offer();
         offer.setClientFullName(offerDto.getClientFullName());
         offer.setClientId(offer.getClientId());
         offer.setMaterialList(offerDto.getMaterialList());
         materialCost(offer);
 
-        return mapper.mapEntityToDto(offer);
+        return offer;
     }
 
     @Override
@@ -57,8 +46,8 @@ public class OfferViewServiceImpl
     }
 
     @Override
-    public List<MaterialDto> findAllMaterials() {
-        return materialMapper.mapMaterialsListToDto(materialService.findAll());
+    public List<Material> findAllMaterials() {
+        return materialService.findAll();
     }
 
     private void materialCost(Offer offer) {
@@ -77,14 +66,14 @@ public class OfferViewServiceImpl
 
     @Override
     @Transactional
-    public OfferDto getOne(Long id) {
-        Offer offer = service.findById(id);
-        return mapper.mapEntityToDto(offer);
+    public Offer getOne(Long id) {
+        return service.findById(id);
+
     }
 
     @Override
     @Transactional
-    public OfferDto modify(Long id, OfferDto offerDto) {
+    public Offer modify(Long id, OfferDto offerDto) {
         Offer offer = service.findById(id);
 
         setIfNotNull(offerDto.getMaterialList(), offer::setMaterialList);
@@ -93,7 +82,7 @@ public class OfferViewServiceImpl
 
         materialCost(offer);
 
-        return mapper.mapEntityToDto(offer);
+        return offer;
     }
 
     //TODO................

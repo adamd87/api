@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.adamd.crm.api.customer.dto.CustomerDto;
 import pl.adamd.crm.api.customer.entity.Customer;
-import pl.adamd.crm.api.customer.mapper.CustomerMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,29 +13,26 @@ import static pl.adamd.crm.api.common.Utils.setIfNotNull;
 
 
 @Service
-public class CustomerViewServiceImpl
-        implements CustomerViewService {
+public class CustomerViewServiceImpl implements CustomerViewService {
 
     @Autowired
     CustomerService service;
-    @Autowired
-    CustomerMapper mapper;
 
     @Override
-    public ResponseEntity<List<CustomerDto>> getAll() {
+    public ResponseEntity<List<Customer>> getAll() {
         List<Customer> customers = service.findAll();
 
-        return ResponseEntity.ok(mapper.mapCustomerListToDto(customers));
+        return ResponseEntity.ok(customers);
     }
 
     @Override
-    public ResponseEntity<CustomerDto> getClientById(Long clientId) {
+    public ResponseEntity<Customer> getClientById(Long clientId) {
         Customer customer = service.findById(clientId);
-        return ResponseEntity.ok(mapper.mapCustomerToDto(customer));
+        return ResponseEntity.ok(customer);
     }
 
     @Override
-    public ResponseEntity<CustomerDto> addNewClient(CustomerDto request) {
+    public ResponseEntity<Customer> addNewClient(CustomerDto request) {
 
         Customer customer = Customer.builder()
                                     .fullName(request.getFullName())
@@ -56,12 +52,12 @@ public class CustomerViewServiceImpl
 
         service.save(customer);
 
-        return ResponseEntity.ok(mapper.mapCustomerToDto(customer));
+        return ResponseEntity.ok(customer);
     }
 
 
     @Override
-    public ResponseEntity<CustomerDto> updateClient(Long id, CustomerDto request) {
+    public ResponseEntity<Customer> updateClient(Long id, CustomerDto request) {
         Customer customer = service.findById(id);
 
         setIfNotNull(request.getFullName(), customer::setFullName);
@@ -80,11 +76,11 @@ public class CustomerViewServiceImpl
 
         service.save(customer);
 
-        return ResponseEntity.ok(mapper.mapCustomerToDto(customer));
+        return ResponseEntity.ok(customer);
     }
 
     @Override
-    public ResponseEntity<List<CustomerDto>> getListOfClientsWithAgreement() {
+    public ResponseEntity<List<Customer>> getListOfClientsWithAgreement() {
         List<Customer> getAllClients = service.findAll();
         List<Customer> result = new ArrayList<>();
 
@@ -94,6 +90,18 @@ public class CustomerViewServiceImpl
             }
         }
 
-        return ResponseEntity.ok(mapper.mapCustomerListToDto(result));
+        return ResponseEntity.ok(result);
+    }
+
+    @Override
+    public ResponseEntity<List<Customer>> getByName(String name) {
+        List<Customer> customerList = service.findAllByFullName(name);
+
+        ResponseEntity<List<Customer>> listResponseEntity;
+
+        listResponseEntity = ResponseEntity.ok(customerList);
+
+
+        return listResponseEntity;
     }
 }

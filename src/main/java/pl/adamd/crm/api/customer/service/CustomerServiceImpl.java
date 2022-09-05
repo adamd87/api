@@ -7,11 +7,12 @@ import org.springframework.web.client.HttpClientErrorException;
 import pl.adamd.crm.api.customer.entity.Customer;
 import pl.adamd.crm.api.customer.repository.CustomerRepository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
-public class CustomerServiceImpl
-        implements CustomerService {
+public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     CustomerRepository customerRepository;
@@ -40,6 +41,17 @@ public class CustomerServiceImpl
     @Override
     public boolean existById(Long clientId) {
         return customerRepository.existsById(clientId);
+    }
+
+    @Override
+    public List<Customer> findAllByFullName(String name) {
+        List<Customer> customers = new ArrayList<>();
+
+        Optional<List<Customer>> customerList = customerRepository.findAllByFullName(name);
+        if (customerList.isPresent()) {
+            customers = customerList.get();
+        }
+        return customers;
     }
 
 }

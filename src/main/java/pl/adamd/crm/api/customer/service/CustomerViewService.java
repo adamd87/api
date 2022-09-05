@@ -3,17 +3,20 @@ package pl.adamd.crm.api.customer.service;
 
 import org.springframework.http.ResponseEntity;
 import pl.adamd.crm.api.customer.dto.CustomerDto;
+import pl.adamd.crm.api.customer.entity.Customer;
 
 import java.util.List;
 
 public interface CustomerViewService {
-    ResponseEntity<List<CustomerDto>> getAll();
+    ResponseEntity<List<Customer>> getAll();
 
-    ResponseEntity<CustomerDto> getClientById(Long clientId);
+    ResponseEntity<Customer> getClientById(Long clientId);
 
-    ResponseEntity<CustomerDto> addNewClient(CustomerDto request);
+    ResponseEntity<Customer> addNewClient(CustomerDto request);
 
-    ResponseEntity<CustomerDto> updateClient(Long id, CustomerDto request);
+    ResponseEntity<Customer> updateClient(Long id, CustomerDto request);
 
-    ResponseEntity<List<CustomerDto>> getListOfClientsWithAgreement();
+    ResponseEntity<List<Customer>> getListOfClientsWithAgreement();
+
+    ResponseEntity<List<Customer>> getByName(String name);
 }

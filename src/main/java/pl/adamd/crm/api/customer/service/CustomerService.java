@@ -14,4 +14,5 @@ public interface CustomerService {
 
     boolean existById(Long clientId);
 
+    List<Customer> findAllByFullName(String name);
 }

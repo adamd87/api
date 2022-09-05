@@ -8,7 +8,7 @@ import pl.adamd.crm.api.customer.entity.Customer;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
+@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.FIELD)
 public interface CustomerMapper {
 
     CustomerDto mapCustomerToDto(Customer customer);

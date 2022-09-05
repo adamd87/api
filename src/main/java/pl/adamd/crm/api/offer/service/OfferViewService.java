@@ -1,23 +1,23 @@
 package pl.adamd.crm.api.offer.service;
 
-import pl.adamd.crm.api.materials.dto.MaterialDto;
+import pl.adamd.crm.api.materials.entity.Material;
 import pl.adamd.crm.api.offer.dto.OfferDto;
 import pl.adamd.crm.api.offer.entity.Offer;
 
 import java.util.List;
 
 public interface OfferViewService {
-    List<OfferDto> getAll();
+    List<Offer> getAll();
 
-    OfferDto add(OfferDto offerDto);
+    Offer add(OfferDto offerDto);
 
-    OfferDto getOne(Long id);
+    Offer getOne(Long id);
 
-    OfferDto modify(Long id, OfferDto offerDto);
+    Offer modify(Long id, OfferDto offerDto);
 
     List<Offer> findByCustomerId(Long id);
 
     void addOffer(Offer offer);
 
-    List<MaterialDto> findAllMaterials();
+    List<Material> findAllMaterials();
 }
