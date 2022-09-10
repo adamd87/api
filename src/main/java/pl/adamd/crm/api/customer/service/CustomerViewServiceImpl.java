@@ -34,21 +34,28 @@ public class CustomerViewServiceImpl implements CustomerViewService {
     @Override
     public ResponseEntity<Customer> addNewClient(CustomerDto request) {
 
-        Customer customer = Customer.builder()
-                                    .fullName(request.getFullName())
-                                    .phone(request.getPhone())
-                                    .email(request.getEmail())
-                                    .info(request.getInfo())
-                                    .agreement(request.isAgreement())
-                                    .business(request.isBusiness())
-                                    .nip(request.getNip())
-                                    .street(request.getStreet())
-                                    .buildingNumber(request.getBuildingNumber())
-                                    .apartmentNumber(request.getApartmentNumber())
-                                    .postCode(request.getPostCode())
-                                    .city(request.getCity())
-                                    .country(request.getCountry())
-                                    .build();
+        Customer customer;
+
+        if (request.getId() != null) {
+            customer = service.findById(request.getId());
+        }
+        else {
+            customer = Customer.builder()
+                               .build();
+        }
+        customer.setFullName(request.getFullName());
+        customer.setPhone(request.getPhone());
+        customer.setEmail(request.getEmail());
+        customer.setInfo(request.getInfo());
+        customer.setAgreement(request.isAgreement());
+        customer.setBusiness(request.isBusiness());
+        customer.setNip(request.getNip());
+        customer.setStreet(request.getStreet());
+        customer.setBuildingNumber(request.getBuildingNumber());
+        customer.setApartmentNumber(request.getApartmentNumber());
+        customer.setPostCode(request.getPostCode());
+        customer.setCity(request.getCity());
+        customer.setCountry(request.getCountry());
 
         service.save(customer);
 
