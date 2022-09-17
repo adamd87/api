@@ -13,8 +13,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
-public class EmployeeDetailsImpl
-        implements UserDetails {
+public class EmployeeDetailsImpl implements UserDetails {
 
     private static final long serialVersionUID = 1L;
 
@@ -23,6 +22,8 @@ public class EmployeeDetailsImpl
     private String username;
 
     private String email;
+
+    private boolean active;
 
     @JsonIgnore
     private String password;
@@ -36,7 +37,8 @@ public class EmployeeDetailsImpl
                                                                                              .name()))
                                                  .collect(Collectors.toList());
 
-        return new EmployeeDetailsImpl(user.getId(), user.getEmployeeName(), user.getEmail(), user.getPassword(),
+        return new EmployeeDetailsImpl(user.getId(), user.getEmployeeName(), user.getEmail(), user.getActive(),
+                user.getPassword(),
                                        authorities);
     }
 
@@ -71,7 +73,7 @@ public class EmployeeDetailsImpl
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return this.active;
     }
 
     @Override

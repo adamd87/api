@@ -13,8 +13,7 @@ import java.io.IOException;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @Component
-public class AuthEntryPointJwt
-        implements AuthenticationEntryPoint {
+public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 
     private static final Logger logger = getLogger(AuthEntryPointJwt.class);
 

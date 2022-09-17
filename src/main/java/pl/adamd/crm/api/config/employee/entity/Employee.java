@@ -27,11 +27,14 @@ public class Employee {
 
     private String password;
 
+    private Boolean active;
+
     @OneToMany
     private Set<Role> roles = new HashSet<>();
 
-    public Employee(String employeeName, String email, String password) {
+    public Employee(String employeeName, String email, boolean active, String password) {
         super();
+        this.active = active;
         this.employeeName = employeeName;
         this.email = email;
         this.password = password;

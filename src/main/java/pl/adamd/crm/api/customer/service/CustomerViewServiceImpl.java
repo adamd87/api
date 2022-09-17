@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.adamd.crm.api.customer.dto.CustomerDto;
+import pl.adamd.crm.api.customer.dto.CustomerDtoList;
 import pl.adamd.crm.api.customer.entity.Customer;
 
 import java.util.ArrayList;
@@ -19,10 +20,12 @@ public class CustomerViewServiceImpl implements CustomerViewService {
     CustomerService service;
 
     @Override
-    public ResponseEntity<List<Customer>> getAll() {
+    public ResponseEntity<List<CustomerDtoList>> getAll() {
         List<Customer> customers = service.findAll();
 
-        return ResponseEntity.ok(customers);
+        List<CustomerDtoList> customerDtoLists = getCustomerDtoLists(customers);
+
+        return ResponseEntity.ok(customerDtoLists);
     }
 
     @Override
@@ -101,14 +104,53 @@ public class CustomerViewServiceImpl implements CustomerViewService {
     }
 
     @Override
-    public ResponseEntity<List<Customer>> getByName(String name) {
-        List<Customer> customerList = service.findAllByFullName(name);
+    public ResponseEntity<List<CustomerDtoList>> getByName(String name) {
+        List<Customer> customerList = service.findAll();
+        name = name.toLowerCase();
 
-        ResponseEntity<List<Customer>> listResponseEntity;
+        List<Customer> result = new ArrayList<>();
 
-        listResponseEntity = ResponseEntity.ok(customerList);
+        for (Customer customer : customerList) {
+            if (customer.getFullName().toLowerCase().contains(name) ||
+                    customer.getEmail().toLowerCase().contains(name) ||
+                    customer.getCity().toLowerCase().contains(name) ||
+                    customer.getStreet().toLowerCase().contains(name) ||
+                    customer.getPhone().toLowerCase().contains(name) ||
+                    customer.getPostCode().toLowerCase().contains(name)) {
+                result.add(customer);
+            }
+        }
+
+        List<CustomerDtoList> customerDtoLists = getCustomerDtoLists(result);
+
+        ResponseEntity<List<CustomerDtoList>> listResponseEntity;
+
+        listResponseEntity = ResponseEntity.ok(customerDtoLists);
 
 
         return listResponseEntity;
+    }
+
+    private static List<CustomerDtoList> getCustomerDtoLists(List<Customer> customerList) {
+        List<CustomerDtoList> customerDtoLists = new ArrayList<>();
+        if (!customerList.isEmpty()) {
+            for (Customer customer : customerList) {
+                CustomerDtoList customerDtoList = new CustomerDtoList();
+                customerDtoList.setId(customer.getId());
+                customerDtoList.setFullName(customer.getFullName());
+                customerDtoList.setEmail(customer.getEmail());
+                customerDtoList.setPhone(customer.getPhone());
+                customerDtoList.setInfo(customer.getInfo());
+                customerDtoList.setAgreement(customer.isAgreement());
+                customerDtoList.setBusiness(customer.isBusiness());
+                customerDtoList.setNip(customer.getNip());
+
+                String address = customer.getStreet() + " " + customer.getBuildingNumber() + "/" +
+                        customer.getApartmentNumber() + ", " + customer.getPostCode() + " " + customer.getCity();
+                customerDtoList.setAddress(address);
+                customerDtoLists.add(customerDtoList);
+            }
+        }
+        return customerDtoLists;
     }
 }

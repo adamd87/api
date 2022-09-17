@@ -31,6 +31,7 @@ public class WebSecurityConfig {
     @Autowired
     EmployeeDetailsServiceImpl employeeDetailsService;
 
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http)
             throws Exception {
@@ -48,12 +49,19 @@ public class WebSecurityConfig {
             .antMatchers("/api/auth/**")
             .permitAll()
             .anyRequest()
-            .authenticated();
+            .authenticated()
+            .and()
+            .logout()
+            .logoutUrl("/api/auth/logout")
+            .logoutSuccessUrl("/api/auth/logout-success")
+            .invalidateHttpSession(true)
+            .permitAll();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

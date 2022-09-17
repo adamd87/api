@@ -11,6 +11,20 @@ public class SignupRequest {
 
     private Set<String> roles = new HashSet<>();
 
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    private boolean active;
+
     private String password;
 
     public String getEmployeeName() {
